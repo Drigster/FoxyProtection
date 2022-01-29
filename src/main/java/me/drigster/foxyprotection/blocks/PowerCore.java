@@ -104,6 +104,7 @@ public class PowerCore implements Listener {
             light.setType(Material.AIR);
 
             Data.get().set("cores." + key, null);
+            Data.save();
             break;
         }
     }

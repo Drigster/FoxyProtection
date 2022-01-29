@@ -36,4 +36,9 @@ public final class FoxyProtection extends JavaPlugin {
         BlockManager.init();
         ItemManager.init();
     }
+
+    @Override
+    public void onDisable() {
+        Data.save();
+    }
 }
