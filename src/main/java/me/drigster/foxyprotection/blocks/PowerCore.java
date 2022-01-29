@@ -30,6 +30,12 @@ public class PowerCore implements Listener {
     static Plugin plugin = FoxyProtection.getPlugin(FoxyProtection.class);
 
     public static void spawn(Location location){
+    public static void give(Player p){
+        Inventory inventory = p.getInventory();
+        inventory.addItem(PowerCoreItem.core);
+    }
+
+
 
         Block base = location.getBlock();
         base.setType(Material.END_PORTAL_FRAME);
