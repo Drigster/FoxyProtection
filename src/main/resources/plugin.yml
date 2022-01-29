@@ -1,0 +1,13 @@
+name: FoxyProtection
+version: '${project.version}'
+main: me.drigster.foxyprotection.FoxyProtection
+api-version: 1.18
+authors: [ Drigster ]
+description: Plugin that adds privates to the game
+commands:
+  spawncore:
+    description: spawncore
+  removecore:
+    description: removecore
+  textinput:
+    description: textinput
