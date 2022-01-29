@@ -8,11 +8,10 @@ import org.bukkit.entity.Player;
 
 public class SpawnCoreCommand implements CommandExecutor {
 
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player p){
-            PowerCore.spawn(p.getLocation());
+            PowerCore.spawn(p.getLocation(), "PowerCore", p);
         }
 
         return true;

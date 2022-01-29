@@ -1,8 +1,14 @@
 package me.drigster.foxyprotection.events;
 
+import me.drigster.foxyprotection.FoxyProtection;
+import me.drigster.foxyprotection.blocks.PowerCore;
 import me.drigster.foxyprotection.files.Data;
+import me.drigster.foxyprotection.guis.PowerCoreGui;
+import me.drigster.foxyprotection.items.PowerCoreItem;
+import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
@@ -17,49 +23,55 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CoreEvents implements Listener {
 
+    static Plugin plugin = FoxyProtection.getPlugin(FoxyProtection.class);
+
     private static boolean checkChunk(Chunk chunk){
         ConfigurationSection sec = Data.get().getConfigurationSection("cores");
 
         boolean check = false;
 
-        for(String key : sec.getKeys(false)){
-            String world = Data.get().getString("cores." + key + ".world");
-            int x = Data.get().getInt("cores." + key + ".x");
-            int y = Data.get().getInt("cores." + key + ".y");
-            int z = Data.get().getInt("cores." + key + ".z");
-            int tier = Data.get().getInt("cores." + key + ".tier");
+        if(sec != null) {
+            for (String key : sec.getKeys(false)) {
+                String world = Data.get().getString("cores." + key + ".world");
+                int x = Data.get().getInt("cores." + key + ".x");
+                int y = Data.get().getInt("cores." + key + ".y");
+                int z = Data.get().getInt("cores." + key + ".z");
+                int tier = Data.get().getInt("cores." + key + ".tier");
 
-            Block core = Bukkit.getServer().getWorld(world).getBlockAt(x, y, z);
-            Chunk coreChunk = core.getChunk();
+                Block core = Bukkit.getServer().getWorld(world).getBlockAt(x, y, z);
+                Chunk coreChunk = core.getChunk();
 
-            int size = tier * 2;
+                int size = tier * 2;
 
-            if (chunk.getX() > coreChunk.getX() + size) {
-                check = false;
-                continue;
-            }
-            if (chunk.getX() < coreChunk.getX() - size) {
-                check = false;
-                continue;
-            }
-            if (chunk.getZ() > coreChunk.getZ() + size) {
-                check = false;
-                continue;
-            }
-            if (chunk.getZ() < coreChunk.getZ() - size) {
-                check = false;
-                continue;
-            }
+                if (chunk.getX() > coreChunk.getX() + size) {
+                    check = false;
+                    continue;
+                }
+                if (chunk.getX() < coreChunk.getX() - size) {
+                    check = false;
+                    continue;
+                }
+                if (chunk.getZ() > coreChunk.getZ() + size) {
+                    check = false;
+                    continue;
+                }
+                if (chunk.getZ() < coreChunk.getZ() - size) {
+                    check = false;
+                    continue;
+                }
 
-            check = true;
-            break;
+                check = true;
+                break;
+            }
         }
 
         return check;
@@ -99,7 +111,7 @@ public class CoreEvents implements Listener {
                                 if(core != null){
                                     Player player = e.getPlayer();
                                     String name = core.getString("name");
-                                    player.sendMessage(name);
+                                    PowerCoreGui.openNewGui(player, coreId);
                                 }
                             }
                         default:
@@ -122,6 +134,30 @@ public class CoreEvents implements Listener {
                     default:
                         e.setCancelled(true);
                         break;
+                }
+            }
+        }
+        else {
+            if(e.getItem() == null) {
+                return;
+            }
+            if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
+                if(e.getHand().equals(EquipmentSlot.HAND)){
+                    if(e.getItem().equals(PowerCoreItem.core)){
+                        e.setCancelled(true);
+                        Player p = e.getPlayer();
+                        Location location = e.getClickedBlock().getLocation().add(0, 1, 0);
+                        new AnvilGUI.Builder()
+                                .onComplete((player, text) -> {
+                                    PowerCore.spawn(location, text, p);
+                                    return AnvilGUI.Response.close();
+                                })
+                                .text("Територия")
+                                .itemLeft(new ItemStack(Material.IRON_SWORD))
+                                .title("Введите название:")
+                                .plugin(plugin)
+                                .open(p);
+                    }
                 }
             }
         }
@@ -223,23 +259,19 @@ public class CoreEvents implements Listener {
 
     @EventHandler
     private void onDamage(EntityDamageEvent e){
-        if(e.getEntity() instanceof Monster){
-            return;
-        }
-        if(e.getEntity().getType().equals(EntityType.GHAST)){
-            return;
-        }
-        if(e.getEntity().getType().equals(EntityType.SLIME)){
-            return;
-        }
-        e.setCancelled(true);
-    }
-
-    @EventHandler
-    private void onSignPlace(BlockPlaceEvent e){
-        Block block = e.getBlock();
-        if(block.getType().equals(Material.CRIMSON_SIGN)){
-           block.set
+        Location location = e.getEntity().getLocation();
+        Chunk chunk = location.getChunk();
+        if (checkChunk(chunk)){
+            if(e.getEntity() instanceof Monster){
+                return;
+            }
+            if(e.getEntity().getType().equals(EntityType.GHAST)){
+                return;
+            }
+            if(e.getEntity().getType().equals(EntityType.SLIME)){
+                return;
+            }
+            e.setCancelled(true);
         }
     }
 }

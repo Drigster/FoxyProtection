@@ -2,6 +2,7 @@ package me.drigster.foxyprotection.blocks;
 
 import me.drigster.foxyprotection.FoxyProtection;
 import me.drigster.foxyprotection.files.Data;
+import me.drigster.foxyprotection.items.PowerCoreItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -9,27 +10,17 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.*;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class PowerCore implements Listener {
 
     static Plugin plugin = FoxyProtection.getPlugin(FoxyProtection.class);
 
-    public static void spawn(Location location){
     public static void give(Player p){
         Inventory inventory = p.getInventory();
         inventory.addItem(PowerCoreItem.core);
@@ -37,6 +28,7 @@ public class PowerCore implements Listener {
 
 
 
+    public static void spawn(Location location, String name, Player owner){
         Block base = location.getBlock();
         base.setType(Material.END_PORTAL_FRAME);
 
@@ -46,7 +38,7 @@ public class PowerCore implements Listener {
         EnderCrystal core = (EnderCrystal) location.getWorld().spawnEntity(base.getLocation().add(0.5, 1,0.5), EntityType.ENDER_CRYSTAL);
         core.setShowingBottom(false);
         core.setFallDistance(0.0f);
-        core.setCustomName("Power Core");
+        core.setCustomName(name);
         core.setCustomNameVisible(true);
         core.setGravity(false);
         core.setInvulnerable(true);
@@ -66,11 +58,14 @@ public class PowerCore implements Listener {
 
         base.setMetadata("coreId", new FixedMetadataValue(plugin, coreId));
 
-        Data.get().set("cores." + coreId + ".name", "Power Core");
+        Data.get().set("cores." + coreId + ".name", name);
         Data.get().set("cores." + coreId + ".world", location.getWorld().getName());
         Data.get().set("cores." + coreId + ".x", location.getBlockX());
         Data.get().set("cores." + coreId + ".y", location.getBlockY());
         Data.get().set("cores." + coreId + ".z", location.getBlockZ());
+        Data.get().set("cores." + coreId + ".tier", 1);
+        Data.get().set("cores." + coreId + ".owner", owner.getUniqueId());
+        Data.get().set("cores." + coreId + ".users", null);
         Data.save();
     }
 
