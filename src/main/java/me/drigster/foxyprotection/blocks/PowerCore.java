@@ -26,7 +26,25 @@ public class PowerCore implements Listener {
         inventory.addItem(PowerCoreItem.core);
     }
 
+    public static void upgrade(String coreId, Player buyer){
+        if(!Data.get().contains("cores." + coreId)){
+            buyer.sendMessage("Ядро не найдено, обратитесь к администратору!");
+            return;
+        }
+        int currentTier = Data.get().getInt("cores." + coreId + ".tier");
+        if(currentTier < 5){
+            Inventory inventory = buyer.getInventory();
+            Data.get().set("cores." + coreId + ".tier", currentTier + 1);
+            Data.save();
+        }
+        else {
+            buyer.sendMessage("Ядро уже макстимального уровня");
+        }
+    }
 
+    public static void addUser(String coreId){
+
+    }
 
     public static void spawn(Location location, String name, Player owner){
         Block base = location.getBlock();
