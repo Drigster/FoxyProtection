@@ -64,7 +64,7 @@ public class PowerCore implements Listener {
         Data.get().set("cores." + coreId + ".y", location.getBlockY());
         Data.get().set("cores." + coreId + ".z", location.getBlockZ());
         Data.get().set("cores." + coreId + ".tier", 1);
-        Data.get().set("cores." + coreId + ".owner", owner.getUniqueId());
+        Data.get().set("cores." + coreId + ".owner", owner.getUniqueId().toString());
         Data.get().set("cores." + coreId + ".users", null);
         Data.save();
     }
