@@ -50,7 +50,7 @@ public class CoreEvents implements Listener {
                 Block core = Bukkit.getServer().getWorld(world).getBlockAt(x, y, z);
                 Chunk coreChunk = core.getChunk();
 
-                int size = tier * 2;
+                int size = tier - 1;
 
                 if (chunk.getX() > coreChunk.getX() + size) {
                     check = false;
