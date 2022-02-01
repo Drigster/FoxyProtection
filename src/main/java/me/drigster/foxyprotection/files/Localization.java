@@ -21,7 +21,7 @@ public class Localization {
     }
 
     public static void setup(){
-        file = new File(plugin.getDataFolder(), "localization.yml");
+        file = new File(plugin.getDataFolder(), "Localization.yml");
 
         if(!file.exists()){
             try {
