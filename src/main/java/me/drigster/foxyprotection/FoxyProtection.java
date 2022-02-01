@@ -1,5 +1,6 @@
 package me.drigster.foxyprotection;
 
+import me.drigster.foxycore.FoxyCore;
 import me.drigster.foxyprotection.commands.GiveCoreCommand;
 import me.drigster.foxyprotection.commands.RemoveCoreCommand;
 import me.drigster.foxyprotection.commands.SpawnCoreCommand;
@@ -23,6 +24,9 @@ public final class FoxyProtection extends JavaPlugin {
         saveDefaultConfig();
         Data.init();
         Localization.init();
+
+        FoxyCore.setPlugin(this);
+        FoxyCore.setLocalization(Localization.get());
 
         getCommand("spawncore").setExecutor(new SpawnCoreCommand());
         getCommand("removecore").setExecutor(new RemoveCoreCommand());

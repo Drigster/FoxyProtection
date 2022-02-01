@@ -9,6 +9,6 @@ commands:
     description: spawncore
   removecore:
     description: removecore
-  textinput:
-    description: textinput  givecore:
+  givecore:
     description: givecore
+depend:  [FoxyCore]

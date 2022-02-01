@@ -1,9 +1,8 @@
 package me.drigster.foxyprotection.guis;
 
+import me.drigster.foxycore.items.GuiElements;
 import me.drigster.foxyprotection.blocks.PowerCore;
 import me.drigster.foxyprotection.files.Data;
-import me.drigster.foxyprotection.items.GuiElements;
-import me.drigster.foxyprotection.managers.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
