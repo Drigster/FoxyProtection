@@ -114,6 +114,10 @@ public class CoreEvents implements Listener {
                                     PowerCoreGui.openNewGui(player, coreId);
                                 }
                             }
+                            else{
+                                PowerCore.load();
+                            }
+                            break;
                         default:
                             break;
                     }
